@@ -1,14 +1,11 @@
 [
-    {
-        "id": "1",
-        "name": "Alice",
-        "email": "alice@gmail.com",
-        "password": "hash_password1",
-        "role": "user",
-        "description": "Alice is a software engineer with a passion for open-source projects.",
-        "links": [
-            { "name": "Github", "url": "https://github.com/alice" },
-            { "name": "LinkedIn", "url": "https://www.linkedin.com/in/alice" }
-        ]
-    }
+  {
+    "id": "8eaddd76-d62d-40c2-9b6c-9cb4952fdf4a",
+    "name": "Jean",
+    "email": "jean@email.com",
+    "password": "$2b$10$vHiw.AuTWMYH5OhuU1428e4EIl6gCrPqIVjYF0EXJUWIFm65vX.K2",
+    "role": "user",
+    "description": "",
+    "links": []
+  }
 ]
