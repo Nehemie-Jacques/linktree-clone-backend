@@ -42,6 +42,15 @@ export async function register(req, res) { // Fonction pour gérer l'inscription
     }
 }
 
+/* Méthode : GET
+URL : http://localhost:3000/api/auth/register
+Body : 
+{
+  "name": "Jean",
+  "email": "jean@email.com",
+  "password": "monMot2Passe"
+}   */ 
+
 // Connexion de l'utilisateur
 // Objectif : Permettre à l'utilisateur de se connecter en vérifiant son email et mot de passe, puis lui renvoyer un jeton (token) pour qu’il puisse rester connecté et accéder à son profil.
 
@@ -73,3 +82,11 @@ export async function login(req, res) {
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
 }
+
+/* Méthode : POST
+URL : http://localhost:3000/api/auth/login
+Body : 
+{
+  "email": "jean@email.com",
+  "password": "monMot2Passe"
+}   */

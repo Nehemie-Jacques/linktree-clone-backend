@@ -19,4 +19,4 @@ export function authenticate(req, res, next) {
     } catch (error) {
         res.status(401).json({ message: 'Token invalide ou expiré' }); // Si le token n'est pas valide ou a expiré, renvoie une erreur
     }
-}
+}  
