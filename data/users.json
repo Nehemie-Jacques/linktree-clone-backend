@@ -1,0 +1,14 @@
+[
+    {
+        "id": "1",
+        "name": "Alice",
+        "email": "alice@gmail.com",
+        "password": "hash_password1",
+        "role": "user",
+        "description": "Alice is a software engineer with a passion for open-source projects.",
+        "links": [
+            { "name": "Github", "url": "https://github.com/alice" },
+            { "name": "LinkedIn", "url": "https://www.linkedin.com/in/alice" }
+        ]
+    }
+]

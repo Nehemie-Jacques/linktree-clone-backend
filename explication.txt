@@ -1,0 +1,88 @@
+linktree-backend/
+│
+├── controllers/
+│   ├── authController.js      # Inscription, connexion, déconnexion
+│   ├── userController.js      # Profil utilisateur, MAJ, suppression
+│   └── adminController.js     # Gestion admin
+│
+├── models/
+│   └── userModel.js           # Modèle utilisateur (profil + liens)
+│
+├── routes/
+│   ├── authRoutes.js
+│   ├── userRoutes.js
+│   └── adminRoutes.js
+│
+├── data/
+│   └── users.json             # Fichier de données temporaire (avant base de données)
+│
+├── middlewares/
+│   └── authMiddleware.js      # Vérification JWT, rôles, etc.
+│
+├── events/
+│   └── userEvents.js          # Gestionnaire d'événements personnalisés
+│
+├── utils/
+│   └── helpers.js             # Fonctions utilitaires (ID unique, hash, etc.)
+│
+├── app.js                     # Serveur principal
+├── package.json
+└── README.md
+
+🧩 Fonctionnalités à implémenter (backend uniquement pour l’instant)
+🔐 Authentification
+POST /api/auth/register → Créer un compte (nom, email, mot de passe hashé)
+
+POST /api/auth/login → Connexion (JWT ou session)
+
+GET /api/auth/logout → Déconnexion
+
+👤 Utilisateur
+GET /api/user/profile → Afficher son profil
+
+PUT /api/user/profile → Modifier description ou liens
+
+DELETE /api/user/delete → Supprimer son compte
+
+🛠️ Admin
+GET /api/admin/users → Voir tous les utilisateurs
+
+GET /api/admin/user/:id → Voir un compte précis
+
+PUT /api/admin/user/:id → Modifier un utilisateur
+
+DELETE /api/admin/user/:id → Supprimer un utilisateur
+
+🔒 Sécurité (essentiel)
+Hash des mots de passe (bcrypt)
+
+Authentification via JWT (jsonwebtoken)
+
+Middleware pour protéger certaines routes (auth + vérification rôle admin)
+
+Validation des données (express-validator ou simple JS pour débuter)
+
+⚡ Événements personnalisés (dans /events/userEvents.js)
+Exemples :
+
+Lorsqu’un utilisateur s’inscrit → événement userRegistered
+
+Lorsqu’un compte est supprimé → événement userDeleted
+
+Cela permet une séparation claire du code et de futures fonctionnalités comme :
+
+Logs
+
+Envoi de mail
+
+Sauvegarde externe
+
+🧠 Technologies/ressources recommandées
+Fonction	Package ou ressource utile
+Création de serveur	express
+Authentification	jsonwebtoken, bcrypt
+Données JSON locales	fs.promises, path
+ID unique	uuid ou Date.now()
+Validation de données	express-validator (facultatif au début)
+Middleware JWT	Fait maison ou basé sur jsonwebtoken
+Événements Node.js	EventEmitter
