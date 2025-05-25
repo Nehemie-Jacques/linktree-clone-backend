@@ -69,3 +69,22 @@ Body (JSON) : {
   ]
 }
  */
+
+
+export async function deleteMyAccount(req, res) {
+    try {
+        const userId = req.user.id;
+        const user = users.find(u => u.id === userId);
+        if (!user) {
+            return res.status(404).json({ message: "Utilisateur non trouvé" });
+        }
+        // Supprimer l'utilisateur du tableau
+        const updatedUsers = users.filter((u) => u.id !== userId);
+        // Écrire les utilisateurs mis à jour dans le fichier
+        await fs.writeFile(dataPath, JSON.stringify(updatedUsers, null, 2), "utf-8");
+        res.status(200).json({ message: "Compte supprimé avec succès" });
+    } catch (error) {
+        console.error("Erreur lors de la suppression du compte :", error);
+        return res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}

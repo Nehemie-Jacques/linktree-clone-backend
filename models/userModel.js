@@ -7,6 +7,15 @@ const users = [
         "role": "user",
         "description": "",
         "links": []
+      },
+      {
+        "id": "932586ae-0d39-462b-98aa-d494734787f6",
+        "name": "Robert",
+        "email": "robert@email.com",
+        "password": "$2b$10$h0D/OJcGamDrt9REAlABT.Imn6Ez7NhBy.SavemL1uE90MYU1QMGq",
+        "role": "user",
+        "description": "",
+        "links": []
       }
 ]; 
 

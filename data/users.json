@@ -5,16 +5,7 @@
     "email": "jean@email.com",
     "password": "$2b$10$vHiw.AuTWMYH5OhuU1428e4EIl6gCrPqIVjYF0EXJUWIFm65vX.K2",
     "role": "user",
-    "description": "Développeur Fullstack en herbe",
-    "links": [
-      {
-        "label": "Portfolio",
-        "url": "https://portfolio.dev"
-      },
-      {
-        "label": "GitHub",
-        "url": "https://github.com/moi"
-      }
-    ]
+    "description": "",
+    "links": []
   }
 ]

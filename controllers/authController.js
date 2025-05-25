@@ -89,4 +89,10 @@ Body :
 {
   "email": "jean@email.com",
   "password": "monMot2Passe"
-}   */
+}   
+  
+
+{
+	"message": "Connexion réussie",
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjkzMjU4NmFlLTBkMzktNDYyYi05OGFhLWQ0OTQ3MzQ3ODdmNiIsImVtYWlsIjoicm9iZXJ0QGVtYWlsLmNvbSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzQ4MTM0NTQ4LCJleHAiOjE3NDgxMzgxNDh9.HoTo28M3H46fMZ7uUFPBGEyFpQpAmm7l0ZshgtXp9yc"
+}*/
