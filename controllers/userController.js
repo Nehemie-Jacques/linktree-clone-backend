@@ -70,7 +70,6 @@ Body (JSON) : {
 }
  */
 
-
 export async function deleteMyAccount(req, res) {
     try {
         const userId = req.user.id;
@@ -88,3 +87,27 @@ export async function deleteMyAccount(req, res) {
         return res.status(500).json({ message: "Erreur interne du serveur" });
     }
 }
+
+/* Méthode : DELETE
+URL : http://localhost:3000/api/users/me */
+
+export async function getPublicProfile(req, res) {
+    const id = req.params.id;
+    const user = users.find((u) => u.id === id);
+    if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    const publicUser = {
+        id: user.id,
+        name: user.name,    
+        description: user.description,
+        links: user.links,
+        avatar: user.avatar || null // Assurez-vous que l'avatar est optionnel
+    };
+
+    res.status(200).json(publicUser);
+}
+
+/* Méthode : GET
+URL : http://localhost:3000/api/users/:id */
