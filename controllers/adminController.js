@@ -23,3 +23,17 @@ export async function loginAdmin(req, res) {
     
     res.status(200).json({ message: "Connexion réussie", token });
 }
+
+// Voir tous les utilisateurs
+// Objectif : Permettre à l’administrateur de voir tous les utilisateurs du système.
+// GET http://localhost:3000/api/admin/users
+export async function getAllUsers(req, res) {
+    try {
+        const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+        const userList = users.filter(u => u.role === 'user'); // Filtrer pour ne garder que les utilisateurs
+        res.status(200).json(userList);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}
+
