@@ -1,102 +1,161 @@
-linktree-backend/
-│
-├── controllers/
-│   ├── authController.js      # Inscription, connexion, déconnexion
-│   ├── userController.js      # Profil utilisateur, MAJ, suppression
-│   └── adminController.js     # Gestion admin
-│
-├── models/
-│   └── userModel.js           # Modèle utilisateur (profil + liens)
-│
+Parfait ! Voici un **résumé clair, complet et structuré** de tout ce que nous avons déjà réalisé dans ton projet **LinkTree Clone** — côté **utilisateur**, en backend avec `Node.js`, `Express.js`, `import`, et gestion des événements.
+
+---
+
+## 🧠 RÉSUMÉ DES FONCTIONNALITÉS UTILISATEUR — BACKEND
+
+### 📁 Structure du projet
+
+```
+project/
+├── app.js
 ├── routes/
-│   ├── authRoutes.js
-│   ├── userRoutes.js
-│   └── adminRoutes.js
-│
-├── data/
-│   └── users.json             # Fichier de données temporaire (avant base de données)
-│
+│   └── userRoutes.js
+├── controllers/
+│   └── userController.js
 ├── middlewares/
-│   └── authMiddleware.js      # Vérification JWT, rôles, etc.
-│
-├── events/
-│   └── userEvents.js          # Gestionnaire d'événements personnalisés
-│
+│   ├── authMiddleware.js
+│   └── isAdmin.js (pour plus tard)
+├── models/
+│   └── userModel.js
 ├── utils/
-│   └── helpers.js             # Fonctions utilitaires (ID unique, hash, etc.)
-│
-├── app.js                     # Serveur principal
-├── package.json
-└── README.md
+│   ├── fileUtils.js
+│   └── eventEmitter.js
+├── database/
+│   └── users.json
+└── events/
+    └── userEvents.js
+```
 
-🧩 Fonctionnalités à implémenter (backend uniquement pour l’instant)
-🔐 Authentification
-POST /api/auth/register → Créer un compte (nom, email, mot de passe hashé)
+---
 
-POST /api/auth/login → Connexion (JWT ou session)
+### ⚙️ Étapes réalisées
 
-GET /api/auth/logout → Déconnexion
+---
 
-👤 Utilisateur
-GET /api/user/profile → Afficher son profil
+### ✅ **Étape 1 – Configuration du serveur**
 
-PUT /api/user/profile → Modifier description ou liens
+* Création du fichier `app.js` pour configurer Express.
+* Activation de `express.json()` pour lire les corps de requêtes JSON.
+* Ajout des routes utilisateur via `userRoutes.js`.
 
-DELETE /api/user/delete → Supprimer son compte
+---
 
-🛠️ Admin
-GET /api/admin/users → Voir tous les utilisateurs
+### ✅ **Étape 2 – Création de compte utilisateur**
 
-GET /api/admin/user/:id → Voir un compte précis
+* **Route :** `POST /api/users/register`
+* **But :** Permettre à un utilisateur de créer un compte avec :
 
-PUT /api/admin/user/:id → Modifier un utilisateur
+  * `name`
+  * `email`
+  * `password`
+* **Fonctions :**
 
-DELETE /api/admin/user/:id → Supprimer un utilisateur
+  * Vérification de l’unicité de l’email.
+  * Hashage du mot de passe avec **bcrypt**.
+  * Génération d’un `id` avec **uuid**.
+  * Sauvegarde dans le fichier `users.json`.
+  * Émission d’un événement `userCreated`.
 
-🔒 Sécurité (essentiel)
-Hash des mots de passe (bcrypt)
+---
 
-Authentification via JWT (jsonwebtoken)
+### ✅ **Étape 3 – Connexion de l’utilisateur**
 
-Middleware pour protéger certaines routes (auth + vérification rôle admin)
+* **Route :** `POST /api/users/login`
+* **But :** Authentifier un utilisateur via `email` et `password`.
+* **Fonctions :**
 
-Validation des données (express-validator ou simple JS pour débuter)
+  * Comparaison du mot de passe avec **bcrypt.compare**.
+  * Génération d’un **token JWT** contenant l’`id`, `email`, `role`.
+  * Envoi du token pour une session sécurisée.
 
-⚡ Événements personnalisés (dans /events/userEvents.js)
-Exemples :
+---
 
-Lorsqu’un utilisateur s’inscrit → événement userRegistered
+### ✅ **Étape 4 – Middleware d’authentification**
 
-Lorsqu’un compte est supprimé → événement userDeleted
+* **Fichier :** `middlewares/authMiddleware.js`
+* **But :** Vérifier que le token JWT est présent et valide.
+* **Fonctions :**
 
-Cela permet une séparation claire du code et de futures fonctionnalités comme :
+  * Décodage du token.
+  * Attachement des infos utilisateur dans `req.user`.
 
-Logs
+---
 
-Envoi de mail
+### ✅ **Étape 5 – Voir son propre profil**
 
-Sauvegarde externe
+* **Route :** `GET /api/users/me`
+* **But :** Récupérer les infos de l’utilisateur actuellement connecté (hors mot de passe).
 
-🧠 Technologies/ressources recommandées
-Fonction	Package ou ressource utile
-Création de serveur	express
-Authentification	jsonwebtoken, bcrypt
-Données JSON locales	fs.promises, path
-ID unique	uuid ou Date.now()
-Validation de données	express-validator (facultatif au début)
-Middleware JWT	Fait maison ou basé sur jsonwebtoken
-Événements Node.js	EventEmitter
+---
 
+### ✅ **Étape 6 – Modifier son profil**
 
- {
-        "id": "1",
-        "name": "Alice",
-        "email": "alice@gmail.com",
-        "password": "hash_password1",
-        "role": "user",
-        "description": "Alice is a software engineer with a passion for open-source projects.",
-        "links": [
-            { "name": "Github", "url": "https://github.com/alice" },
-            { "name": "LinkedIn", "url": "https://www.linkedin.com/in/alice" }
-        ]
-    }
+* **Route :** `PUT /api/users/me`
+* **But :** Permettre à l’utilisateur de modifier :
+
+  * sa description
+  * ses liens (ex : GitHub, Portfolio, etc.)
+* **Fonctions :**
+
+  * Vérification du token.
+  * Mise à jour dans le fichier `users.json`.
+  * Émission de l’événement `userUpdated`.
+
+---
+
+### ✅ **Étape 7 – Supprimer son propre compte**
+
+* **Route :** `DELETE /api/users/me`
+* **But :** Supprimer toutes les données de l’utilisateur connecté.
+* **Fonctions :**
+
+  * Recherche par ID.
+  * Suppression de l’entrée dans `users.json`.
+  * Émission de l’événement `userDeleted`.
+
+---
+
+### ✅ **Étape 8 – Voir un profil public**
+
+* **Route :** `GET /api/users/:id`
+* **But :** Permettre à n’importe qui de consulter un profil public via son ID.
+* **Affichage :**
+
+  * `name`
+  * `description`
+  * `links`
+
+---
+
+### 🖼️ **Étape 9 – Gestion d’image de profil (avatar)** *(à implémenter)*
+
+* Sera ajoutée avec **Multer** pour l'upload, et stockage local ou cloud (selon ton choix).
+
+---
+
+### 🎯 Notions maîtrisées jusqu’ici
+
+* Express.js (routes, middlewares)
+* Lecture/écriture JSON
+* Bcrypt (hashing de mot de passe)
+* JWT (authentification token)
+* Gestion d’événements personnalisés (`EventEmitter`)
+* Organisation MVC simple (modèles, contrôleurs)
+* Rôles (`user`, `admin`)
+* Bonnes pratiques de séparation de code
+
+---
+
+### ✅ Fonctions en place dans le contrôleur `userController.js`
+
+| Fonction           | Description                      | Méthode / Route            |
+| ------------------ | -------------------------------- | -------------------------- |
+| `registerUser`     | Crée un nouveau compte           | `POST /api/users/register` |
+| `loginUser`        | Connexion et retour du token     | `POST /api/users/login`    |
+| `getMyProfile`     | Voir ses infos (protégé par JWT) | `GET /api/users/me`        |
+| `updateMyProfile`  | Modifier description et liens    | `PUT /api/users/me`        |
+| `deleteMyAccount`  | Supprimer son compte             | `DELETE /api/users/me`     |
+| `getPublicProfile` | Voir un profil public            | `GET /api/users/:id`       |
+
+---

@@ -111,3 +111,17 @@ export async function getPublicProfile(req, res) {
 
 /* Méthode : GET
 URL : http://localhost:3000/api/users/:id */
+
+
+export async function uploadAvatar(req, res) {
+    const userId = req.user.id;
+    const user = users.find((u) => u.id === userId);
+    if (!user) {
+        return res.status(404).json({ message: "Utilisateur non trouvé" });
+    }
+
+    user.avatar = `uploads/avatars/${req.file.filename}`; // Chemin vers l'avatar uploadé
+
+    await fs.writeFile(dataPath, JSON.stringify(users, null, 2), "utf-8");
+    res.status(200).json({ message: "Avatar mis à jour avec succès", avatar: user.avatar });
+}
