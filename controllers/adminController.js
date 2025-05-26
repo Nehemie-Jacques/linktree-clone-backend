@@ -43,16 +43,41 @@ export async function getAllUsers(req, res) {
 // GET http://localhost:3000/api/admin/users/:id
 
 export async function updateUserByAdmin(req, res) {
-    const { id } = req.params; // Récupérer l'ID de l'utilisateur à partir des paramètres de la requête
-    const updates = req.body; // Récupérer les données de mise à jour à partir du corps de la requête
+    try { 
+        const { id } = req.params; // Récupérer l'ID de l'utilisateur à partir des paramètres de la requête
+        const updates = req.body; // Récupérer les données de mise à jour à partir du corps de la requête
+    
+        const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+        const user = users.find(u => u.id === id);
+        if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+    
+        // Mettre à jour les informations de l'utilisateur
+        Object.assign(user, updates);
+    
+        await writeFile('datapath', JSON.stringify(users, null, 2));
+        res.status(200).json({ message: "Utilisateur mis à jour avec succès", user });
+    } catch(error) {
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}
 
-    const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
-    const user = users.find(u => u.id === id);
-    if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+// Supprimer un utilisateur
+// Objectif : Permettre à l’administrateur de supprimer un utilisateur du système.
+// DELETE http://localhost:3000/api/admin/users/:id
 
-    // Mettre à jour les informations de l'utilisateur
-    Object.assign(user, updates);
+export async function deleteUserByAdmin(req, res) {
+    try {
+        const { id } = req.params;
 
-    await writeFile('datapath', JSON.stringify(users, null, 2));
-    res.status(200).json({ message: "Utilisateur mis à jour avec succès", user });
+        const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+        const user = users.find(u => u.id === id);
+        if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+    
+        users = users.filter(u => u.id !== id); // Filtrer pour supprimer l'utilisateur
+    
+        await writeFile(dataPath, JSON.stringify(users, null, 2));
+        res.status(200).json({ message: "Utilisateur supprimé avec succès" });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
 }
