@@ -1,4 +1,4 @@
-Parfait ! Voici un **résumé clair, complet et structuré** de tout ce que nous avons déjà réalisé dans ton projet **LinkTree Clone** — côté **utilisateur**, en backend avec `Node.js`, `Express.js`, `import`, et gestion des événements.
+Voici un **résumé clair, complet et structuré** de tout ce que nous avons déjà réalisé dans ton projet **LinkTree Clone** — côté **utilisateur**, en backend avec `Node.js`, `Express.js`, `import`, et gestion des événements.
 
 ---
 
@@ -157,5 +157,66 @@ project/
 | `updateMyProfile`  | Modifier description et liens    | `PUT /api/users/me`        |
 | `deleteMyAccount`  | Supprimer son compte             | `DELETE /api/users/me`     |
 | `getPublicProfile` | Voir un profil public            | `GET /api/users/:id`       |
+
+---
+
+
+Voici un **résumé complet** des **fonctionnalités de l'administrateur** que nous avons mises en place dans ton projet **LinkTree Clone (backend)** :
+
+---
+
+## 🧑‍💼 PARTIE ADMINISTRATEUR – FONCTIONNALITÉS IMPLEMENTÉES
+
+### ✅ 1. **Connexion (Login Admin)**
+
+* Route : `POST /api/admin/login`
+* Vérifie l’email et le mot de passe de l’admin.
+* Génère un **token JWT** avec le rôle `"admin"` si les identifiants sont valides.
+
+---
+
+### 🔐 2. **Protection des routes admin**
+
+* Middleware `isAdmin` :
+
+  * Vérifie le token JWT.
+  * Autorise uniquement les utilisateurs ayant le rôle `"admin"` à accéder aux routes protégées.
+
+---
+
+### 👁️ 3. **Voir la liste de tous les utilisateurs**
+
+* Route : `GET /api/admin/users`
+* Renvoie la **liste complète** de tous les utilisateurs (filtrés avec rôle `"user"`).
+
+---
+
+### ✏️ 4. **Modifier un utilisateur**
+
+* Route : `PUT /api/admin/users/:id`
+* L’admin peut modifier **n’importe quel utilisateur** en fournissant son ID et les champs à mettre à jour.
+
+---
+
+### 🗑️ 5. **Supprimer un utilisateur**
+
+* Route : `DELETE /api/admin/users/:id`
+* Supprime définitivement un utilisateur par son ID.
+
+---
+
+### ➕ 6. **Ajouter un utilisateur manuellement**
+
+* Route : `POST /api/admin/users`
+* L’admin peut créer un nouvel utilisateur en fournissant `name`, `email`, `password`.
+* Le mot de passe est automatiquement **haché**.
+* Le rôle est fixé à `"user"` par défaut.
+
+---
+
+### 👁️ 7. **Voir le profil complet d’un utilisateur**
+
+* Route : `GET /api/admin/users/:id`
+* Permet à l’admin de consulter **toutes les infos** d’un utilisateur spécifique via son ID.
 
 ---

@@ -110,3 +110,20 @@ export async function createUserByAdmin(req, res) {
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
 }
+
+// Voir le profil complet d’un utilisateur
+// Objectif : Permettre à l’administrateur de voir le profil complet d’un utilisateur spécifique.
+// POST http://localhost:3000/api/admin/users/:id
+
+export async function getUserByIdAdmin(req, res) {
+    try {
+        const { id } = req.params;
+        const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+        const user = users.find(u => u.id === id);
+        if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}
+
