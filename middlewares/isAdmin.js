@@ -1,3 +1,5 @@
+// This middleware checks if the user is an admin by verifying the JWT token.
+
 import jwt from 'jsonwebtoken';
 
 export const isAdmin = (req, res, next) => {
