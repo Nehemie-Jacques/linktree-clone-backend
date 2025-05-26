@@ -2,6 +2,7 @@ import bcrypyt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
+import { writeFile } from 'fs';
 
 const dataPath = path.resolve('data/users.json');
 
@@ -37,3 +38,21 @@ export async function getAllUsers(req, res) {
     }
 }
 
+// Modifier un utilisateur
+// Objectif : Permettre à l’administrateur de modifier les informations d’un utilisateur spécifique.
+// GET http://localhost:3000/api/admin/users/:id
+
+export async function updateUserByAdmin(req, res) {
+    const { id } = req.params; // Récupérer l'ID de l'utilisateur à partir des paramètres de la requête
+    const updates = req.body; // Récupérer les données de mise à jour à partir du corps de la requête
+
+    const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+    const user = users.find(u => u.id === id);
+    if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
+
+    // Mettre à jour les informations de l'utilisateur
+    Object.assign(user, updates);
+
+    await writeFile('datapath', JSON.stringify(users, null, 2));
+    res.status(200).json({ message: "Utilisateur mis à jour avec succès", user });
+}
