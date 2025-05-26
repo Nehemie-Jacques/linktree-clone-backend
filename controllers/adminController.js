@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import fs from 'fs/promises';
 import path from 'path';
 import { writeFile } from 'fs';
+import { v4 as uuidv4 } from 'uuid';
 
 const dataPath = path.resolve('data/users.json');
 
@@ -77,6 +78,34 @@ export async function deleteUserByAdmin(req, res) {
     
         await writeFile(dataPath, JSON.stringify(users, null, 2));
         res.status(200).json({ message: "Utilisateur supprimé avec succès" });
+    } catch (error) {
+        res.status(500).json({ message: "Erreur interne du serveur" });
+    }
+}
+
+// Ajouter un utilisateur manuellement
+// Objectif : Permettre à l’administrateur de créer un nouvel utilisateur dans le système.
+// POST http://localhost:3000/api/admin/users
+
+export async function createUserByAdmin(req, res) {
+    try {
+        const { name, email, password } = req.body;
+        const hashedPassword = await bcrypyt.hash(password, 10);
+
+        const users = JSON.parse(await fs.readFile(dataPath, "utf-8"));
+        const newUser = {
+            id: uuidv4(),
+            name,
+            email,
+            password: hashedPassword,
+            role: "user", 
+            description: "",
+            links: [],
+        };
+        users.push(newUser);
+
+        await writeFile(dataPath, JSON.stringify(users, null, 2));
+        res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser });
     } catch (error) {
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
