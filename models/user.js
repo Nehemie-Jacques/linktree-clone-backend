@@ -1,3 +1,5 @@
+// Définit un modèle Mongoose pour un itilisateur dans une apllication LinkTree 
+
 import mongoose from "mongoose";
 
 const linkSchema = new mongoose.Schema({
@@ -13,6 +15,6 @@ const userSchema = new mongoose.Schema({
     description: { type: String, default: '' },
     links: [linkSchema],
     avatar: { type: String, default: '' },
-}, { timestamps: true });
+}, { timestamps: true }); // Ajoute les champs createdAt et updatedAt automatiquement
 
-export default mongoose.model('User', userSchema);
+export default mongoose.model('User', userSchema); // Exporte le modèle User

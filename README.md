@@ -1,7 +1,7 @@
 
 # 📎 LinkTree Clone - Backend API
 
-Ce projet est un clone simplifié de LinkTree, permettant à des utilisateurs de créer un profil public contenant leurs liens sociaux. Il est entièrement développé avec **Node.js** et **Express.js** et utilise des fichiers JSON pour le stockage des données.
+Ce projet est un clone simplifié de LinkTree, permettant à des utilisateurs de créer un profil public contenant leurs liens sociaux. Il est entièrement développé avec **Node.js** et **Express.js** et utilise la base de données MONGODB pour le stockage des données.
 
 ---
 
@@ -101,6 +101,7 @@ npm start
 ## 🔧 Technologies utilisées
 
 * **Node.js**
+* **MongoDB**
 * **Express.js**
 * **TailwindCSS** (prévu pour le frontend)
 * **JavaScript**
