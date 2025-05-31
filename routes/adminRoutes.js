@@ -18,5 +18,6 @@ router.put("/users/:id", updateUserByAdmin);
 router.delete("/users/:id", deleteUserByAdmin);
 router.post("/users", createUserByAdmin);
 router.get("/users/:id", getUserByIdAdmin);
+router.get("/users", isAdmin, getAllUsers);
 
 export default router;

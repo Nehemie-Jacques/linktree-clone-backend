@@ -57,8 +57,8 @@ export async function login(req, res) {
         if (!isMatch) return res.status(400).json({ message: "Email ou mot de passe incorrect" });
         
         const token = jwt.sign(
-            { id: newuser._id }, // Payload du token
-            'process.env.JWT_SECRET', // Clé secrète pour signer le token (à remplacer par une clé sécurisée)
+            { id: user._id }, // Payload du token
+            process.env.JWT_SECRET, // Clé secrète pour signer le token (à remplacer par une clé sécurisée)
             { expiresIn: '1h' } // Le token expirera dans 1 heure
         );
 

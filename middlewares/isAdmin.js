@@ -18,3 +18,10 @@ export const isAdmin = (req, res, next) => {
         res.status(401).json({ message: "Token invalide ou expiré" });
     }
 };
+
+export function isAdmin(req, res, next) {
+    if (req.user && req.user.role === 'admin') {
+        return next();
+    }
+    return res.status(403).json({ message: "Accès interdit, rôle non autorisé" });
+}

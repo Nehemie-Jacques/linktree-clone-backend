@@ -1,4 +1,4 @@
-import bcrypyt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
 
@@ -12,10 +12,13 @@ export async function loginAdmin(req, res) {
         const admin = await User.findOne({ email, role: 'admin' });
         if (!admin) return res.status(401).json({ message: "Admin non trouvé" });
     
-        const isMatch = await bcrypyt.compare(password, admin.password); // Compare le mot de passe fourni avec le mot de passe haché stocké
+        const isMatch = await bcrypt.compare(password, admin.password); // Compare le mot de passe fourni avec le mot de passe haché stocké
         if (!isMatch) return res.status(401).json({ message: "Mot de passe incorrect" });
     
-        const token = jwt.sign({ id: admin._id, role: admin.role }, 'votre_clé_secete', { expiresIn: '1h' }); // Clé secrète pour signer le token (à remplacer par une clé sécurisée)
+        const token = jwt.sign(
+            { id: admin._id, role: admin.role }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '1h' }); // Clé secrète pour signer le token (à remplacer par une clé sécurisée)
         res.status(200).json({ message: "Connexion réussie", token });
     } catch (error) {
         res.status(500).json({ message: "Erreur interne du serveur" });
@@ -40,7 +43,11 @@ export async function getAllUsers(req, res) {
 
 export async function updateUserByAdmin(req, res) {
     try { 
-        const user = await User.findByIdAndUpdate(req.params.id);
+        const updates = req.body;
+        const user = await User.findByIdAndUpdate(req.params.id, updates, { 
+            new: true,
+            runValidators: true,
+        }).select("-password");
         if (!user) return res.status(404).json({ message: "Utilisateur non trouvé" });
         res.status(200).json({ message: "Utilisateur mis à jour avec succès", user });
     } catch(error) {
@@ -67,9 +74,10 @@ export async function deleteUserByAdmin(req, res) {
 // POST http://localhost:3000/api/admin/users
 
 export async function createUserByAdmin(req, res) {
+    const { _id, name, email } = newUser;
     try {
         const { name, email, password } = req.body;
-        const hashedPassword = await bcrypyt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
             name,
@@ -82,7 +90,7 @@ export async function createUserByAdmin(req, res) {
 
         await newUser.save();
 
-        res.status(201).json({ message: "Utilisateur créé avec succès", user: newUser });
+        res.status(201).json({ message: "Utilisateur créé avec succès", user: { _id, name, email }  });
     } catch (error) {
         res.status(500).json({ message: "Erreur interne du serveur" });
     }
@@ -90,7 +98,7 @@ export async function createUserByAdmin(req, res) {
 
 // Voir le profil complet d’un utilisateur
 // Objectif : Permettre à l’administrateur de voir le profil complet d’un utilisateur spécifique.
-// POST http://localhost:3000/api/admin/users/:id
+// GET http://localhost:3000/api/admin/users/:id
 
 export async function getUserByIdAdmin(req, res) {
     try {
