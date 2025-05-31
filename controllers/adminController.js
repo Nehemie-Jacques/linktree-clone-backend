@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/user.js';
+import { isAdmin } from '../middlewares/isAdmin.js';
+
 
 //  Connexion de l’administrateur
 // Objectif : Permettre à un administrateur d'accéder au système avec email + mot de passe.

@@ -2,6 +2,8 @@ import User from "../models/user.js";
 import bcrypt from 'bcrypt'; // Bibliothèque pour le hachage de mot de passe
 import jwt from 'jsonwebtoken'; // Pour la gestion des tokens JWT
 import dotenv from 'dotenv';
+import { isAdmin } from '../middlewares/isAdmin.js';
+
 
 dotenv.config();
 

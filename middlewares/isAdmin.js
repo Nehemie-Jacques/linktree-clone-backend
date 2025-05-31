@@ -4,9 +4,12 @@ import jwt from 'jsonwebtoken';
 
 export const isAdmin = (req, res, next) => {
     const auth = req.headers.authorization; // Récupérer le token depuis les en-têtes de la requête
-    if (!token) return res.status(401).json({ message: "Accès non autorisé, token manquant" });
+    if (!auth) {
+        return res.status(401).json({ message: "Accès non autorisé, token manquant" });
+    }
 
-    const token = auth.slipt(" ")[1]; // Extraire le token du format "Bearer token"
+    const token = auth.split(" ")[1]; // Corrigé : slipt -> split
+
     try {
         const decoded = jwt.verify(token, 'votre_clé_secrète'); // Vérifier le token avec la clé secrète
         if (decoded.role !== 'admin') {
@@ -18,10 +21,3 @@ export const isAdmin = (req, res, next) => {
         res.status(401).json({ message: "Token invalide ou expiré" });
     }
 };
-
-export function isAdmin(req, res, next) {
-    if (req.user && req.user.role === 'admin') {
-        return next();
-    }
-    return res.status(403).json({ message: "Accès interdit, rôle non autorisé" });
-}
