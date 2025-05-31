@@ -1,40 +1,34 @@
+```markdown
+# 📎 LinkTree Clone - Backend (Partie Administrateur)
 
-# 📎 LinkTree Clone - Backend API
-
-Ce projet est un clone simplifié de LinkTree, permettant à des utilisateurs de créer un profil public contenant leurs liens sociaux. Il est entièrement développé avec **Node.js** et **Express.js** et utilise la base de données MONGODB pour le stockage des données.
-
----
-
-## ✅ Fonctionnalités principales
-
-### 👤 Utilisateur
-- 🔐 Inscription et connexion
-- 📝 Création et mise à jour du profil
-- 🔗 Ajout, modification et suppression de liens affiliés
-- 👁️ Affichage du profil public
-- ❌ Suppression de son compte
-- 🔄 Authentification via JSON Web Tokens (JWT)
-
-### 🛠️ Administrateur
-- 🔐 Connexion admin
-- 👁️ Voir la liste de tous les utilisateurs
-- 🧑‍💻 Modifier ou supprimer un utilisateur
-- ➕ Ajouter un utilisateur manuellement
-- 👁️ Voir le profil complet d’un utilisateur
+Un backend Node.js/Express.js simple et structuré pour gérer les utilisateurs d’un clone de LinkTree.  
+Les données sont stockées dans **MongoDB** à l'aide de **Mongoose**.  
+Les administrateurs peuvent ajouter, consulter, modifier ou supprimer des utilisateurs via une API RESTful.
 
 ---
 
-## 🧱 Structure du projet
+## 🚀 Fonctionnalités principales
+
+- 🔐 Connexion sécurisée à MongoDB
+- 👥 Création, lecture, mise à jour et suppression d'utilisateurs
+- 🔁 Gestion des mots de passe (hachage avec `bcrypt`)
+- 📦 Architecture modulaire (routes, contrôleurs, modèles)
+- 🧪 Test des routes avec Insomnia/Postman
+- 🛠 API REST complète pour l'administration des utilisateurs
+
+---
+
+## 📂 Structure du projet
 
 ```
 .
 ├── app.js
+├── config
+│   └── db.js
 ├── controllers
 │   ├── adminController.js
 │   ├── authController.js
 │   └── userController.js
-├── data
-│   └── users.json
 ├── events
 │   └── userEvents.js
 ├── explication.txt
@@ -43,7 +37,7 @@ Ce projet est un clone simplifié de LinkTree, permettant à des utilisateurs de
 │   ├── isAdmin.js
 │   └── upload.js
 ├── models
-│   └── userModel.js
+│   └── user.js
 ├── node_modules
 ├── package.json
 ├── package-lock.json
@@ -52,81 +46,124 @@ Ce projet est un clone simplifié de LinkTree, permettant à des utilisateurs de
 │   ├── adminRoutes.js
 │   ├── authRoutes.js
 │   └── userRoutes.js
-├── uploads
-│   └── avatars
-└── utils
-    └── helpers.js
-
+└── uploads
+    └── avatars
 ````
 
 ---
 
-## 🚀 Lancement du projet
+## ⚙️ Installation
 
-### 📦 Installation
+1. **Cloner le projet**
+
 ```bash
 git clone https://github.com/Nehemie-Jacques/linktree-clone-backend.git
-cd linktree-backend
-npm install
+cd linktree-clone-backend
 ````
 
-### ▶️ Démarrer le serveur
+2. **Installer les dépendances**
+
+```bash
+npm install
+```
+
+3. **Configurer les variables d’environnement**
+
+Créer un fichier `.env` :
+
+```env
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/linktree
+```
+
+4. **Démarrer le serveur**
 
 ```bash
 npm start
 ```
 
-## 📡 Routes principales
-
-### 🔐 Authentification Utilisateur
-
-* `POST /api/users/register`
-* `POST /api/users/login`
-* `GET /api/users/me` *(profil personnel via token)*
-* `PUT /api/users/me` *(mise à jour profil)*
-* `DELETE /api/users/me`
-* `GET /api/users/:id` *(profil public)*
-
-### 🔐 Administration
-
-* `POST /api/admin/login`
-* `GET /api/admin/users`
-* `GET /api/admin/users/:id`
-* `PUT /api/admin/users/:id`
-* `DELETE /api/admin/users/:id`
-* `POST /api/admin/users`
-
 ---
 
-## 🔧 Technologies utilisées
+## 📡 API REST – Routes disponibles
 
-* **Node.js**
-* **MongoDB**
-* **Express.js**
-* **TailwindCSS** (prévu pour le frontend)
-* **JavaScript**
-* **JWT** pour l'authentification
-* **bcrypt** pour le hachage des mots de passe
-* **uuid** pour générer des IDs uniques
+### 🔍 Lire tous les utilisateurs
+
+```http
+GET /api/admin/users
+```
+
+### 🔍 Lire un utilisateur par ID
+
+```http
+GET /api/admin/users/:id
+```
+
+### ➕ Créer un utilisateur
+
+```http
+POST /api/admin/users
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "motdepasse",
+  "bio": "Bio courte ici",
+  "profilePicture": "https://lien-image.com/avatar.jpg",
+  "links": [
+    { "title": "YouTube", "url": "https://youtube.com/@john" },
+    { "title": "Site", "url": "https://john.com" }
+  ]
+}
+```
+
+### ✏️ Modifier un utilisateur
+
+```http
+PUT /api/admin/users/:id
+Content-Type: application/json
+
+{
+  "name": "Jane Doe",
+  "bio": "Nouvelle bio",
+  "password": "nouveaumdp"
+}
+```
+
+### ❌ Supprimer un utilisateur
+
+```http
+DELETE /api/admin/users/:id
+```
 
 ---
 
 ## 🔒 Sécurité
 
-* Les mots de passe sont hachés avec `bcrypt`.
-* Authentification basée sur JWT.
-* Accès protégé pour les routes sensibles avec un middleware d’authentification.
+* Les mots de passe sont **hachés avec `bcrypt`** avant stockage.
+* Le champ `email` est **unique**.
 
 ---
 
-## ✍️ Auteur
+## 🛠 Technologies utilisées
 
-> Ce projet est réalisé par \[Néhémie] dans le cadre de mon apprentissage du développement web fullstack.
+* [Node.js](https://nodejs.org)
+* [Express.js](https://expressjs.com)
+* [MongoDB](https://www.mongodb.com)
+* [Mongoose](https://mongoosejs.com)
+* [bcrypt](https://www.npmjs.com/package/bcrypt)
+* [dotenv](https://www.npmjs.com/package/dotenv)
 
 ---
 
-## 📄 Licence
+## 🧑‍💻 Auteur
 
-Ce projet est sous licence libre à usage éducatif.
+Projet réalisé par \[Néhémie].
+
+---
+
+## 📜 Licence
+
+Ce projet est libre d’utilisation à des fins pédagogiques.
 
 ```

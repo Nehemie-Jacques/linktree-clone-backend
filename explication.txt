@@ -220,3 +220,132 @@ Voici un **résumé complet** des **fonctionnalités de l'administrateur** que n
 * Permet à l’admin de consulter **toutes les infos** d’un utilisateur spécifique via son ID.
 
 ---
+
+Parfait, voici un **résumé clair et structuré** de tout ce qui a été réalisé **depuis l’introduction de MongoDB** dans ton projet LinkTree Clone — partie backend administrateur :
+
+---
+
+## 🧠 Objectif
+
+Remplacer le système de stockage basé sur un **fichier JSON (`users.json`)** par une **base de données MongoDB**, plus robuste, rapide et adaptée à un projet réel.
+
+---
+
+## 🛠️ Modifications Apportées
+
+### 1. ✅ **Connexion à MongoDB**
+
+* 📦 Utilisation de **Mongoose** pour interagir avec MongoDB.
+* Création d’un fichier `db.js` pour gérer la connexion.
+* La connexion est lancée dès le démarrage du serveur Express.
+
+```js
+mongoose.connect(MONGO_URI, options)
+```
+
+---
+
+### 2. ✅ **Création du modèle utilisateur (`User.js`)**
+
+* Un **schéma Mongoose** a été défini pour les utilisateurs.
+* Champs inclus : `name`, `email`, `password`, `bio`, `profilePicture`, `links`, etc.
+* Utilisation de **types Mongoose** + validation + `timestamps`.
+
+```js
+const userSchema = new mongoose.Schema({
+  name: String,
+  email: { type: String, unique: true },
+  password: String,
+  ...
+})
+```
+
+---
+
+### 3. ✅ **Mise à jour des contrôleurs Admin**
+
+Les anciennes opérations qui manipulaient le fichier `users.json` ont été réécrites pour fonctionner avec **MongoDB** :
+
+#### a. `getAllUsers`
+
+* 📚 Liste tous les utilisateurs depuis la collection `users`.
+
+#### b. `getUserById`
+
+* 🔍 Recherche un utilisateur par son identifiant (`_id`).
+
+#### c. `deleteUser`
+
+* 🗑 Supprime un utilisateur de la base MongoDB.
+
+#### d. `updateUser`
+
+* ✏ Met à jour les champs d’un utilisateur.
+
+#### e. `addUser`
+
+* ➕ Crée manuellement un utilisateur (ex: depuis un panneau admin).
+
+---
+
+### 4. ✅ **Sécurité : Hashage des mots de passe**
+
+* Le mot de passe est **haché** avec `bcrypt` avant d’être enregistré :
+
+```js
+user.password = await bcrypt.hash(password, 10)
+```
+
+---
+
+### 5. ✅ **Insomnia et test des routes**
+
+* Toutes les routes REST ont été testées et fonctionnent :
+
+  * `GET /api/admin/users`
+  * `GET /api/admin/users/:id`
+  * `POST /api/admin/users`
+  * `PUT /api/admin/users/:id`
+  * `DELETE /api/admin/users/:id`
+
+---
+
+### 6. ✅ **Fichier `.env`**
+
+* Ajout d’une variable d’environnement `MONGO_URI` pour centraliser la configuration de la base de données.
+* Facilite le déploiement et la modularité.
+
+---
+
+## 🔄 Ce qui a été supprimé ou remplacé
+
+| Avant (JSON)                    | Maintenant (MongoDB)                          |
+| ------------------------------- | --------------------------------------------- |
+| `users.json`                    | `users` collection dans MongoDB               |
+| `fs.promises`                   | `mongoose`                                    |
+| Lecture/écriture fichier manuel | Méthodes `.find()`, `.save()`, `.updateOne()` |
+| Boucles et filtres JS           | Requêtes MongoDB via Mongoose                 |
+
+---
+
+## 🧪 Bonus : Vérification des données
+
+Tu peux voir et manipuler les utilisateurs :
+
+* avec **MongoDB Compass**
+* avec **Mongo Shell**
+* ou en utilisant **les routes via Insomnia/Postman**
+
+---
+
+## 🧩 Prochaine étape possible ?
+
+* Authentification avec JWT (si pas encore fait)
+* Gestion des administrateurs (modèle `Admin`)
+* Ajout de pagination pour `getAllUsers`
+* Interface admin frontend (HTML/Tailwind ou React)
+
+---
+
+Souhaites-tu que je te génère une **documentation Insomnia exportée** avec toutes les requêtes testables ?
+Ou tu préfères maintenant travailler sur l'authentification sécurisée, ou sur la partie "liens sociaux" ?
